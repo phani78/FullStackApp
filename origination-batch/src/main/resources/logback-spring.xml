@@ -1,0 +1,14 @@
+<configuration>
+    <conversionRule conversionWord="maskedMsg"
+                    converterClass="com.bank.origination.batch.PiiMaskingMessageConverter"/>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>{"timestamp":"%date{yyyy-MM-dd'T'HH:mm:ss.SSSXXX}","level":"%level","logger":"%logger{36}","correlationId":"%X{correlationId}","message":"%maskedMsg"}%n</pattern>
+            </layout>
+        </encoder>
+    </appender>
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>

@@ -1,0 +1,7 @@
+{
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+  "github.copilot.chat.agent.enabled": true,
+  "java.compile.nullAnalysis.mode": "automatic",
+  "editor.formatOnSave": true,
+  "java.configuration.updateBuildConfiguration": "automatic"
+}

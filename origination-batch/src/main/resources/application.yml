@@ -1,0 +1,39 @@
+spring:
+  profiles:
+    default: local
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/card_origination_db}
+    username: ${DATABASE_USERNAME:origination_svc_user}
+    password: ${DATABASE_PASSWORD}
+    hikari:
+      maximum-pool-size: 8
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: false
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      initialize-schema: never
+server:
+  port: ${BATCH_SERVER_PORT:8081}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+app:
+  security:
+    jwt-secret-base64: ${JWT_SECRET_BASE64}
+    jwt-issuer: ${JWT_ISSUER:local-card-origination}
+    jwt-audience: ${JWT_AUDIENCE:card-origination}
+  batch:
+    output-directory: ${BATCH_OUTPUT_DIRECTORY:./data/outputs}
+logging:
+  config: classpath:logback-spring.xml

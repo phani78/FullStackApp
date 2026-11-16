@@ -1,0 +1,12 @@
+.gradle/
+build/
+**/build/
+node_modules/
+origination-ui/dist/
+data/
+*.log
+*.tmp
+*.dat
+playwright-report/
+test-results/
+e2e-tests/playwright/.cache/

@@ -1,0 +1,70 @@
+spring:
+  profiles:
+    default: local
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/card_origination_db}
+    username: ${DATABASE_USERNAME:origination_svc_user}
+    password: ${DATABASE_PASSWORD}
+    hikari:
+      maximum-pool-size: 10
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: false
+  batch:
+    jdbc:
+      initialize-schema: never
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      acks: all
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 5
+    consumer:
+      group-id: card-origination-underwriting-v1
+      enable-auto-commit: false
+      auto-offset-reset: earliest
+      properties:
+        isolation.level: read_committed
+        spring.json.trusted.packages: com.bank.origination.domain
+        spring.json.value.default.type: com.bank.origination.domain.ApplicationEvent
+        spring.json.use.type.headers: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    listener:
+      ack-mode: record
+server:
+  port: ${SERVER_PORT:8080}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+app:
+  security:
+    jwt-secret-base64: ${JWT_SECRET_BASE64}
+    jwt-issuer: ${JWT_ISSUER:local-card-origination}
+    jwt-audience: ${JWT_AUDIENCE:card-origination}
+    ssn-hash-salt: ${SSN_HASH_SALT}
+  mock:
+    latency-ms: ${MOCK_LATENCY_MS:25}
+    failure-rate: ${MOCK_FAILURE_RATE:0}
+  kafka:
+    retry-attempts: 3
+    outbox-delay-ms: 1000
+    topics:
+      submitted: card.application.submitted.v1
+logging:
+  config: classpath:logback-spring.xml
