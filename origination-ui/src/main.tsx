@@ -5,7 +5,7 @@ import { store } from "./app/store";
 import { App } from "./features/App";
 import { ErrorBoundary } from "./features/ErrorBoundary";
 import "./styles.css";
-
+//creating root here to render the app in the index.html file
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>
